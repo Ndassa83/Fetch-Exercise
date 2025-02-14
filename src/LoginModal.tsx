@@ -29,8 +29,7 @@ export const LoginModal = ({ setLoggedIn }: logInModalProps) => {
 
     if (response.ok) {
       setLoggedIn(true);
-
-      console.log(response.headers.getSetCookie());
+      setLogInFail(false);
 
       console.log("Login successful!");
     } else {

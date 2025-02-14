@@ -150,8 +150,8 @@ function App() {
                   <Card className="card">
                     <CardMedia
                       sx={{ height: 140 }}
-                      image={dog.img} //image
-                      title={dog.id} // name
+                      image={dog.img}
+                      title={dog.id}
                     />
                     <CardContent>
                       <Typography gutterBottom variant="h5" component="div">

@@ -37,8 +37,8 @@ export const MatchedDogModal = ({
       <Card className="card">
         <CardMedia
           sx={{ height: 140 }}
-          image={matchedDogObj.img} //image
-          title={matchedDogObj.id} // name
+          image={matchedDogObj.img}
+          title={matchedDogObj.id}
         />
         <CardContent>
           <Typography gutterBottom variant="h5" component="div">
