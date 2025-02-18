@@ -9,15 +9,19 @@ import {
   Slider,
   TextField,
 } from "@mui/material";
+import { SortCategoryType, SortType } from "../Types";
 
-type searchDogsProps = {
+const DATABASE_TOTAL = 10000;
+const sortCatOptions: SortCategoryType[] = ["breed", "name", "age"];
+
+type SearchDogsProps = {
   breedNames: string[];
   selectedBreedNames: string[];
   setSelectedBreedNames: React.Dispatch<React.SetStateAction<string[]>>;
-  setSort: React.Dispatch<React.SetStateAction<string>>;
-  setSortCategory: React.Dispatch<React.SetStateAction<string>>;
-  sortCategory: string;
-  sort: string;
+  setSort: React.Dispatch<React.SetStateAction<SortType>>;
+  setSortCategory: React.Dispatch<React.SetStateAction<SortCategoryType>>;
+  sortCategory: SortCategoryType;
+  sort: SortType;
   setSize: React.Dispatch<React.SetStateAction<number>>;
   size: number;
   setPage: React.Dispatch<React.SetStateAction<number>>;
@@ -48,9 +52,7 @@ export const SearchDogs = ({
   ageMin,
   setAgeMax,
   ageMax,
-}: searchDogsProps) => {
-  const sortCatOptions = ["breed", "name", "age"];
-
+}: SearchDogsProps) => {
   return (
     <div className="search-container">
       <Autocomplete
@@ -112,7 +114,9 @@ export const SearchDogs = ({
           <Select
             value={sortCategory}
             label="sort by"
-            onChange={(e) => setSortCategory(e.target.value)}
+            onChange={(e) =>
+              setSortCategory(e.target.value as SortCategoryType)
+            }
           >
             {sortCatOptions.map((category) => (
               <MenuItem value={category}>{category}</MenuItem>
@@ -124,7 +128,7 @@ export const SearchDogs = ({
           <Select
             value={sort}
             label="Asc or Desc"
-            onChange={(e) => setSort(e.target.value)}
+            onChange={(e) => setSort(e.target.value as SortType)}
           >
             <MenuItem value={"asc"}>ascending</MenuItem>
             <MenuItem value={"desc"}>descending</MenuItem>
@@ -142,9 +146,9 @@ export const SearchDogs = ({
         Age Range {ageMin} to {ageMax}
       </div>
       <Slider
-        value={[ageMin, ageMax]}
-        onChange={(_, newValue: any) => {
-          {
+        value={[ageMin, ageMax] as number[]}
+        onChange={(_, newValue) => {
+          if (Array.isArray(newValue)) {
             setAgeMin(newValue[0]);
             setAgeMax(newValue[1]);
           }
@@ -155,15 +159,16 @@ export const SearchDogs = ({
         disableSwap
       />
       <div className="search-buttons">
-        <Button onClick={() => setPage(page - 1)} disabled={page === 1}>
+        <Button
+          onClick={() => setPage((prev) => prev - 1)}
+          disabled={page === 1}
+        >
           Previous
         </Button>
-        <div style={{ alignContent: "center", alignSelf: "center" }}>
-          Page {page}
-        </div>
+        <div>Page {page}</div>
         <Button
-          onClick={() => setPage(page + 1)}
-          disabled={page === 10000 / size}
+          onClick={() => setPage((prev) => prev + 1)}
+          disabled={page === Math.ceil(DATABASE_TOTAL / size)}
         >
           Next
         </Button>

@@ -5,17 +5,9 @@ import {
   Typography,
   Button,
 } from "@mui/material";
+import { Dog } from "../Types";
 
-interface Dog {
-  id: string;
-  img: string;
-  name: string;
-  age: number;
-  zip_code: string;
-  breed: string;
-}
-
-type matchedDogModalProps = {
+type MatchedDogModalProps = {
   matchedDogObj: Dog;
   setMatchedDogObj: React.Dispatch<React.SetStateAction<Dog | null>>;
   setFavoritedDogs: React.Dispatch<React.SetStateAction<Dog[]>>;
@@ -25,28 +17,29 @@ export const MatchedDogModal = ({
   matchedDogObj,
   setMatchedDogObj,
   setFavoritedDogs,
-}: matchedDogModalProps) => {
+}: MatchedDogModalProps) => {
   const handleReMatch = () => {
     setMatchedDogObj(null);
     setFavoritedDogs([]);
   };
 
+  const name = matchedDogObj.name;
+  const image = matchedDogObj.img;
+  const id = matchedDogObj.id;
+  const breed = matchedDogObj.breed;
+  const age = matchedDogObj.age;
+
   return (
     <div className="login-modal">
-      <div style={{ fontSize: "28px" }}>You've been matched!</div>
+      <div>You've been matched!</div>
       <Card className="card">
-        <CardMedia
-          sx={{ height: 140 }}
-          image={matchedDogObj.img}
-          title={matchedDogObj.id}
-        />
+        <CardMedia sx={{ height: 140 }} image={image} title={id} />
         <CardContent>
           <Typography gutterBottom variant="h5" component="div">
-            {matchedDogObj.name}
+            {name}
           </Typography>
           <Typography variant="body2" sx={{ color: "text.secondary" }}>
-            You have been matched with {matchedDogObj.name}, a{" "}
-            {matchedDogObj.age} year old {matchedDogObj.breed}!
+            You have been matched with {name}, a {age} year old {breed}!
           </Typography>
         </CardContent>
         <Button onClick={() => handleReMatch()}>Find another match</Button>
