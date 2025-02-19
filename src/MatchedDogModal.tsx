@@ -30,7 +30,7 @@ export const MatchedDogModal = ({
   const age = matchedDogObj.age;
 
   return (
-    <div className="login-modal">
+    <div className="matchedDog-modal">
       <div>You've been matched!</div>
       <Card className="card">
         <CardMedia sx={{ height: 140 }} image={image} title={id} />

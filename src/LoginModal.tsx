@@ -26,7 +26,7 @@ export const LoginModal = ({ setLoggedIn }: LogInModalProps) => {
   };
   return (
     <div className="login-modal">
-      <div>Login to be matched with the Dog of your dreams!</div>
+      <div>Login to begin your search</div>
       <TextField
         className="login-modal-input"
         placeholder="Enter your name"
@@ -39,12 +39,18 @@ export const LoginModal = ({ setLoggedIn }: LogInModalProps) => {
         value={email}
         onChange={(e) => setEmail(e.target.value)}
       />
-      {email && name && (
-        <Button className="login-modal-button" onClick={handleLogin}>
-          Login
-        </Button>
+
+      <Button
+        disabled={!email || !name}
+        className="login-modal-button"
+        onClick={handleLogin}
+      >
+        Login
+      </Button>
+
+      {logInFail && (
+        <div className="login-modal-error">*Please input valid email</div>
       )}
-      {logInFail && <div>*Please input valid email</div>}
     </div>
   );
 };

@@ -35,9 +35,8 @@ function App() {
 
   useEffect(() => {
     if (loggedIn) {
-      fetchDogBreedNames().then((breeds) => setBreedNames(breeds));
-    }
-    if (!loggedIn) {
+      fetchDogBreedNames().then(setBreedNames);
+    } else {
       setBreedNames([]);
     }
   }, [loggedIn]);
@@ -48,7 +47,7 @@ function App() {
   };
 
   const handleFilterDogs = async () => {
-    const filteredDogs = await fetchDogObjs(
+    const fetchedDogs = await fetchDogObjs(
       selectedBreedNames,
       sort,
       sortCategory,
@@ -58,7 +57,7 @@ function App() {
       ageMin,
       ageMax
     );
-    setFilteredDogs(filteredDogs);
+    setFilteredDogs(fetchedDogs);
   };
 
   useEffect(() => {
@@ -76,14 +75,9 @@ function App() {
   ]);
 
   useEffect(() => {
-    if (matchedDogId.length > 0) {
-      for (let i = 0; i < favoritedDogs.length; i++) {
-        if (matchedDogId === favoritedDogs[i].id) {
-          setMatchedDogObj(favoritedDogs[i]);
-        } else {
-          console.log("No match found");
-        }
-      }
+    if (matchedDogId) {
+      const matchedDog = favoritedDogs.find((dog) => dog.id === matchedDogId);
+      setMatchedDogObj(matchedDog || null);
     }
   }, [matchedDogId]);
 
@@ -92,13 +86,8 @@ function App() {
   }
 
   return (
-    <div>
-      <div>
-        <Logout
-          setLoggedIn={setLoggedIn}
-          setMatchedDogId={setMatchedDogId}
-          setFavoritedDogs={setFavoritedDogs}
-        />
+    <div className="container">
+      <div className="search">
         <SearchDogs
           breedNames={breedNames}
           selectedBreedNames={selectedBreedNames}
@@ -118,18 +107,53 @@ function App() {
           ageMin={ageMin}
           ageMax={ageMax}
         />
-      </div>
-      {filteredDogs.length <= 0 && (
-        <Button onClick={() => handleFilterDogs()}>Start your search! </Button>
-      )}
-      {favoritedDogs.length > 0 && (
+
+        {filteredDogs.length === 0 && (
+          <Button variant="contained" sx={{ mt: 3 }} onClick={handleFilterDogs}>
+            Start your search!
+          </Button>
+        )}
+
         <Button
-          sx={{ fontSize: "25px", backgroundColor: "orange" }}
-          onClick={() => handleFetchMatch()}
+          className="search-buttons"
+          disabled={favoritedDogs.length === 0}
+          variant="contained"
+          onClick={handleFetchMatch}
         >
           Click to find your perfect match
         </Button>
-      )}
+        <Logout
+          setLoggedIn={setLoggedIn}
+          setMatchedDogId={setMatchedDogId}
+          setFavoritedDogs={setFavoritedDogs}
+        />
+      </div>
+      <div className="card-container">
+        {filteredDogs.map((dog: Dog) => (
+          <Card key={dog.id} className="card">
+            <CardMedia sx={{ height: 140 }} image={dog.img} title={dog.id} />
+            <CardContent>
+              <Typography gutterBottom variant="h5">
+                {dog.name}
+              </Typography>
+              <Typography variant="body2" color="text.secondary">
+                {dog.name} is a {dog.breed}, {dog.age} years old from zip:{" "}
+                {dog.zip_code}. Looking for a loving home!
+              </Typography>
+            </CardContent>
+            <CardActions sx={{ justifyContent: "center" }}>
+              <Button
+                disabled={favoritedDogs.includes(dog)}
+                onClick={() => setFavoritedDogs((prev) => [...prev, dog])}
+                size="small"
+                variant="outlined"
+              >
+                Favorite
+              </Button>
+            </CardActions>
+          </Card>
+        ))}
+      </div>
       {matchedDogObj && (
         <MatchedDogModal
           matchedDogObj={matchedDogObj}
@@ -137,40 +161,6 @@ function App() {
           setFavoritedDogs={setFavoritedDogs}
         />
       )}
-
-      <div className="card-container">
-        {filteredDogs.length > 0 &&
-          filteredDogs.map((dog: Dog) => {
-            return (
-              <Card className="card">
-                <CardMedia
-                  sx={{ height: 140 }}
-                  image={dog.img}
-                  title={dog.id}
-                />
-                <CardContent>
-                  <Typography gutterBottom variant="h5" component="div">
-                    {dog.name}
-                  </Typography>
-                  <Typography variant="body2" sx={{ color: "text.secondary" }}>
-                    This is {dog.name}, a {dog.breed} that is full of love. They
-                    are {dog.age} years old from zip: {dog.zip_code} and ready
-                    to find a home.
-                  </Typography>
-                </CardContent>
-                <CardActions sx={{ justifyContent: "center" }}>
-                  <Button
-                    disabled={favoritedDogs.includes(dog)}
-                    onClick={() => setFavoritedDogs((prev) => [...prev, dog])}
-                    size="small"
-                  >
-                    Favorite
-                  </Button>
-                </CardActions>
-              </Card>
-            );
-          })}
-      </div>
     </div>
   );
 }

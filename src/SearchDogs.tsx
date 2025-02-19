@@ -55,6 +55,7 @@ export const SearchDogs = ({
 }: SearchDogsProps) => {
   return (
     <div className="search-container">
+      <div className="search-header">Search Dogs</div>
       <Autocomplete
         className="search-field"
         value={selectedBreedNames}
