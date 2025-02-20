@@ -88,6 +88,11 @@ function App() {
   return (
     <div className="container">
       <div className="search">
+        {filteredDogs.length === 0 && (
+          <Button variant="contained" sx={{ mt: 3 }} onClick={handleFilterDogs}>
+            Dogs not loading? click here
+          </Button>
+        )}
         <SearchDogs
           breedNames={breedNames}
           selectedBreedNames={selectedBreedNames}
@@ -108,19 +113,13 @@ function App() {
           ageMax={ageMax}
         />
 
-        {filteredDogs.length === 0 && (
-          <Button variant="contained" sx={{ mt: 3 }} onClick={handleFilterDogs}>
-            Start your search!
-          </Button>
-        )}
-
         <Button
-          className="search-buttons"
+          className="submit-button"
           disabled={favoritedDogs.length === 0}
           variant="contained"
           onClick={handleFetchMatch}
         >
-          Click to find your perfect match
+          Find your perfect match
         </Button>
         <Logout
           setLoggedIn={setLoggedIn}
@@ -137,8 +136,8 @@ function App() {
                 {dog.name}
               </Typography>
               <Typography variant="body2" color="text.secondary">
-                {dog.name} is a {dog.breed}, {dog.age} years old from zip:{" "}
-                {dog.zip_code}. Looking for a loving home!
+                {dog.name} is a {dog.age} year old {dog.breed}. {dog.name} lives
+                in the {dog.zip_code} area, and is looking for a loving home!
               </Typography>
             </CardContent>
             <CardActions sx={{ justifyContent: "center" }}>

@@ -21,5 +21,5 @@ export const Logout = ({
     setFavoritedDogs([]);
   };
 
-  return <div>{<Button onClick={handleLogOut}> Log out </Button>}</div>;
+  return <div>{<Button onClick={handleLogOut}> Logout </Button>}</div>;
 };

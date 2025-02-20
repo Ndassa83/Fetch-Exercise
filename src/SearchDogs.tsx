@@ -12,7 +12,6 @@ import {
 import { SortCategoryType, SortType } from "../Types";
 
 const DATABASE_TOTAL = 10000;
-const sortCatOptions: SortCategoryType[] = ["breed", "name", "age"];
 
 type SearchDogsProps = {
   breedNames: string[];
@@ -109,9 +108,10 @@ export const SearchDogs = ({
           />
         )}
       />
+      <div className="sort-title">Sort by:</div>
       <div className="sort-field">
         <FormControl className="search-field">
-          <InputLabel>Sort by:</InputLabel>
+          <InputLabel>Type</InputLabel>
           <Select
             value={sortCategory}
             label="sort by"
@@ -119,24 +119,24 @@ export const SearchDogs = ({
               setSortCategory(e.target.value as SortCategoryType)
             }
           >
-            {sortCatOptions.map((category) => (
-              <MenuItem value={category}>{category}</MenuItem>
-            ))}
+            <MenuItem value={"breed"}>Breed</MenuItem>
+            <MenuItem value={"age"}>Age</MenuItem>
+            <MenuItem value={"name"}>Name</MenuItem>
           </Select>
         </FormControl>
         <FormControl fullWidth>
-          <InputLabel>Asc | Dsc</InputLabel>
+          <InputLabel>Asc | Desc</InputLabel>
           <Select
             value={sort}
             label="Asc or Desc"
             onChange={(e) => setSort(e.target.value as SortType)}
           >
-            <MenuItem value={"asc"}>ascending</MenuItem>
-            <MenuItem value={"desc"}>descending</MenuItem>
+            <MenuItem value={"asc"}>Asc</MenuItem>
+            <MenuItem value={"desc"}>Desc</MenuItem>
           </Select>
         </FormControl>
         <TextField
-          label="# Results"
+          label="Results"
           type="number"
           value={size}
           onChange={(e) => setSize(Number(e.target.value))}
@@ -144,7 +144,7 @@ export const SearchDogs = ({
       </div>
 
       <div>
-        Age Range {ageMin} to {ageMax}
+        Age Range: {ageMin} - {ageMax}
       </div>
       <Slider
         value={[ageMin, ageMax] as number[]}
@@ -166,7 +166,7 @@ export const SearchDogs = ({
         >
           Previous
         </Button>
-        <div>Page {page}</div>
+        <div className="page">Page: {page}</div>
         <Button
           onClick={() => setPage((prev) => prev + 1)}
           disabled={page === Math.ceil(DATABASE_TOTAL / size)}
